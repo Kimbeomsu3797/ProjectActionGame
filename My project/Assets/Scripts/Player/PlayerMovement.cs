@@ -15,10 +15,13 @@ public class PlayerMovement : MonoBehaviour
     public bool dashing = false;
 
     float h, v;
+    
+    protected PlayerAttack playerAttack;
     // Start is called before the first frame update
     void Start()
     {
         avatar = GetComponent<Animator>();
+        playerAttack = GetComponent<PlayerAttack>();
     }
     public void OnStickChanged(Vector2 stickPos)
     {
@@ -75,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
             while (attacking)
             {
                 avatar.SetTrigger("AttackStart");
+                playerAttack.NormalAttack();
                 yield return new WaitForSeconds(1f);
             }
         }
@@ -84,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
         if(Time.time - lastSkillTime > 1f)
         {
             avatar.SetBool("Skill", true);
+            playerAttack.SkillAttack();
             lastSkillTime = Time.time;
         }
     }
@@ -98,6 +103,7 @@ public class PlayerMovement : MonoBehaviour
             lastDashTime = Time.time;
             dashing = true;
             avatar.SetTrigger("Dash");
+            playerAttack.DashAttack();
         }
     }
     public void OnDashUp()
